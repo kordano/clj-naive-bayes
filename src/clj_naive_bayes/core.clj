@@ -14,7 +14,7 @@
   "Compute word frequencies in document list restricted to dictionary entries"
   [doc-list]
   (->> doc-list
-       (pmap #(split % #" "))
+       (pmap #(into #{} (split % #" ")))
        (apply concat)
        frequencies
        (pmap (fn [[k v]] [k (/ v (count doc-list))]))
@@ -35,8 +35,7 @@
                         (sort-by second >)
                         (take 2500)
                         keys)
-        model {:spam-vs-ham (/ (count raw-spam)
-                             (count raw-ham))
+        model {:spam-vs-ham (/ (count raw-spam) (count raw-ham))
              :spam-probs (select-keys (word-probs raw-spam) dictionary)
              :ham-probs (select-keys (word-probs raw-ham) dictionary)
              :dictionary dictionary}]
@@ -85,3 +84,13 @@
        (test-mails "data/spam-test")
        (test-mails "data/nonspam-test"))
   (System/exit 0))
+
+
+(comment
+
+  (->> (train "data/spam-train" "data/nonspam-train")
+       (test-mails "data/spam-test")
+       (test-mails "data/nonspam-test")
+       :done)
+
+  )

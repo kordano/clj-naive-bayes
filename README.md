@@ -1,14 +1,24 @@
 # clj-naive-bayes
 
-A Clojure library designed to ... well, that part is up to you.
+Simple document filtering via naive bayes.
 
 ## Usage
 
-FIXME
+Get test docs
+
+```
+cd data
+sh get-testmails.sh
+```
+
+Run it
+```
+lein run
+```
 
 ## License
 
-Copyright © 2015 FIXME
+Copyright © 2015 Konrad Kühne
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.

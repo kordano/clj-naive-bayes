@@ -14,10 +14,10 @@
   "Compute word frequencies in document list restricted to dictionary entries"
   [doc-list]
   (->> doc-list
-       (pmap #(into #{} (split % #" ")))
+       (map #(into #{} (split % #" ")))
        (apply concat)
        frequencies
-       (pmap (fn [[k v]] [k (/ v (count doc-list))]))
+       (map (fn [[k v]] [k (/ v (count doc-list))]))
        (into {})))
 
 
@@ -28,7 +28,7 @@
   (let [raw-spam (read-mails spam-dir)
         raw-ham (read-mails non-spam-dir)
         dictionary (->> (concat raw-spam raw-ham)
-                        (pmap #(split % #" "))
+                        (map #(split % #" "))
                         (apply concat)
                         frequencies
                         (remove (fn [[k v]] (< (count k) 2)))
@@ -72,7 +72,7 @@
   [dir model]
   (println (str "Testing " dir " ..."))
   (let [results (->> (read-mails dir)
-                     (pmap #(classify % model))
+                     (map #(classify % model))
                      frequencies)]
     (println (str "Classified as spam: " (or (get results true) 0)))
     (println (str "Classified as nonspam: " (or (get results false) 0)))
@@ -88,9 +88,9 @@
 
 (comment
 
-  (->> (train "data/spam-train" "data/nonspam-train")
-       (test-mails "data/spam-test")
-       (test-mails "data/nonspam-test")
-       :done)
+  (time (->> (train "data/spam-train" "data/nonspam-train")
+             (test-mails "data/spam-test")
+             (test-mails "data/nonspam-test")
+             :done))
 
   )
